@@ -15,14 +15,14 @@ interface TimeControlsProps {
 const TimeControls: React.FC<TimeControlsProps> = observer(
   ({ onSortByChange, onJumpToStep, onSetReference, onToggleThumbnailStep }) => {
     const { referenceStep } = volumeStore;
-    const [enlarged, setEnlarged] = useState<{ step: number; type: 'low' | 'high'; url: string } | null>(null);
+    const [enlarged, setEnlarged] = useState<{ step: number; type: 'low' | 'mid' | 'high'; url: string } | null>(null);
 
     const canRemove = volumeStore.thumbnailSteps.length > 1;
 
-    const renderThumb = (step: number, type: 'low' | 'high') => {
+    const renderThumb = (step: number, type: 'low' | 'mid' | 'high') => {
       const img = volumeStore.getThumbnailImage(step, type);
       const isRef = step === referenceStep;
-      const rangeLabel = type === 'low' ? '低密度' : '高密度';
+      const rangeLabel = type === 'low' ? '低密度' : type === 'mid' ? '中密度' : '高密度';
       return (
         <div
           key={`${type}-${step}`}
@@ -66,6 +66,12 @@ const TimeControls: React.FC<TimeControlsProps> = observer(
                 <span>低密度</span>
               </div>
               <div className="thumb-cards">{volumeStore.thumbnailSteps.map(s => renderThumb(s, 'low'))}</div>
+            </div>
+            <div className="thumb-rows">
+              <div className="thumb-row-label thumb-row-label--mid">
+                <span>中密度</span>
+              </div>
+              <div className="thumb-cards">{volumeStore.thumbnailSteps.map(s => renderThumb(s, 'mid'))}</div>
             </div>
             <div className="thumb-rows">
               <div className="thumb-row-label thumb-row-label--high">

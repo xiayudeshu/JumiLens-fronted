@@ -61,6 +61,15 @@ const ThumbnailControls: React.FC = observer(() => {
       </div>
 
       <div className="thumb-ctl-group">
+        <label>中密度</label>
+        <Slider min={0} max={1} step={0.01} value={volumeStore.thumbnailMidRange[0]} onChange={(e) => volumeStore.setThumbnailMidRange(e.value as number, volumeStore.thumbnailMidRange[1])} className="h-3 flex-1 mx-0.5" />
+        <Slider min={0} max={1} step={0.01} value={volumeStore.thumbnailMidRange[1]} onChange={(e) => volumeStore.setThumbnailMidRange(volumeStore.thumbnailMidRange[0], e.value as number)} className="h-3 flex-1 mx-0.5" />
+        <span className="ctl-range-val">
+          {volumeStore.thumbnailMidRange[0].toFixed(2)}-{volumeStore.thumbnailMidRange[1].toFixed(2)}
+        </span>
+      </div>
+
+      <div className="thumb-ctl-group">
         <label>高密度</label>
         <Slider min={0} max={1} step={0.01} value={volumeStore.thumbnailHighRange[0]} onChange={(e) => volumeStore.setThumbnailHighRange(e.value as number, volumeStore.thumbnailHighRange[1])} className="h-3 flex-1 mx-0.5" />
         <Slider min={0} max={1} step={0.01} value={volumeStore.thumbnailHighRange[1]} onChange={(e) => volumeStore.setThumbnailHighRange(volumeStore.thumbnailHighRange[0], e.value as number)} className="h-3 flex-1 mx-0.5" />

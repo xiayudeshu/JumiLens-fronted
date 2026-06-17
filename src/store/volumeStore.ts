@@ -55,6 +55,7 @@ class VolumeStore {
   thumbnailImages = new Map<string, string>();
   thumbnailSteps = [0];
   thumbnailLowRange: [number, number] = [0.05, 0.25];
+  thumbnailMidRange: [number, number] = [0.35, 0.55];
   thumbnailHighRange: [number, number] = [0.6, 0.9];
   thumbnailView: ThumbnailView = 'current';
   thumbnailCompareMode: ThumbnailCompareMode = 'off';
@@ -317,24 +318,28 @@ class VolumeStore {
     return this.thumbnailStats.get(step);
   };
 
-  private buildThumbnailKey = (step: number, type: 'low' | 'high') => {
-    const range = type === 'low' ? this.thumbnailLowRange : this.thumbnailHighRange;
+  private buildThumbnailKey = (step: number, type: 'low' | 'mid' | 'high') => {
+    const range = type === 'low' ? this.thumbnailLowRange : type === 'mid' ? this.thumbnailMidRange : this.thumbnailHighRange;
     const compareFlag = `${this.thumbnailCompareMode}-r${this.thumbnailCompareRefIndex}-${this.thumbnailCompareOverlay ? 'o1' : 'o0'}`;
     return `${step}-${type}-${this.thumbnailView}-${range[0].toFixed(2)}-${range[1].toFixed(2)}-${compareFlag}`;
   };
 
-  setThumbnailImage = (step: number, type: 'low' | 'high', dataUrl: string) => {
+  setThumbnailImage = (step: number, type: 'low' | 'mid' | 'high', dataUrl: string) => {
     const key = this.buildThumbnailKey(step, type);
     this.thumbnailImages.set(key, dataUrl);
   };
 
-  getThumbnailImage = (step: number, type: 'low' | 'high'): string | undefined => {
+  getThumbnailImage = (step: number, type: 'low' | 'mid' | 'high'): string | undefined => {
     const key = this.buildThumbnailKey(step, type);
     return this.thumbnailImages.get(key);
   };
 
   setThumbnailLowRange = (min: number, max: number) => {
     this.thumbnailLowRange = [Math.min(min, max), Math.max(min, max)];
+  };
+
+  setThumbnailMidRange = (min: number, max: number) => {
+    this.thumbnailMidRange = [Math.min(min, max), Math.max(min, max)];
   };
 
   setThumbnailHighRange = (min: number, max: number) => {

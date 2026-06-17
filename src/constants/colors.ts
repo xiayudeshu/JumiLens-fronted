@@ -62,6 +62,8 @@ export const COLORS = {
   density2D: {
     /** 低密度体素高亮色 */
     lowPreview: '#4DCCFF',
+    /** 中密度体素高亮色 */
+    midPreview: '#50E3A4',
     /** 高密度体素高亮色 */
     highPreview: '#F21E14',
   },

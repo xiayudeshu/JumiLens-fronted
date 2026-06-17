@@ -397,7 +397,7 @@
 
 .thumb-rows {
   display: flex; align-items: stretch;
-  flex: 0 0 47%;
+  flex: 0 0 32%;
   min-height: 0;
   min-width: max-content;
   gap: clamp(3px, 0.35vw, 6px);
@@ -436,6 +436,11 @@
     .thumb-row-label__dot { background: hsl(200 85% 48%); }
   }
 
+  &--mid {
+    color: hsl(155 60% 40%);
+    .thumb-row-label__dot { background: hsl(155 65% 46%); }
+  }
+
   &--high {
     color: hsl(0 70% 46%);
     .thumb-row-label__dot { background: hsl(0 75% 52%); }
@@ -450,9 +455,9 @@
 }
 
 .thumb-card {
-  width: clamp(120px, 14vw, 240px);
+  width: clamp(80px, 9vw, 160px);
   flex-shrink: 0;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   display: flex; flex-direction: column; align-items: center;
   gap: 2px; padding: 3px;
   border-radius: 6px;

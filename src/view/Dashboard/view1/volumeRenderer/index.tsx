@@ -446,6 +446,7 @@ const VolumeRenderer: React.FC = observer(() => {
 
         // ── Render at display resolution (360×270 = 4:3, more than enough for UI) ──
         const LOW_SIZE = { width: 360, height: 270 };
+        const MID_SIZE = { width: 300, height: 225 };
         const HIGH_SIZE = { width: 240, height: 180 };
 
         if (!volumeStore.getThumbnailImage(step, 'low')) {
@@ -466,6 +467,26 @@ const VolumeRenderer: React.FC = observer(() => {
                   LOW_SIZE
                 );
           volumeStore.setThumbnailImage(step, 'low', img);
+        }
+
+        if (!volumeStore.getThumbnailImage(step, 'mid')) {
+          const img =
+            volumeStore.thumbnailCompareMode !== 'off' && refData
+              ? vs.renderThumbnailDiff(
+                  data, refData,
+                  volumeStore.thumbnailMidRange,
+                  volumeStore.thumbnailView,
+                  volumeStore.thumbnailCompareOverlay,
+                  MID_SIZE
+                )
+              : vs.renderThumbnail(
+                  data,
+                  volumeStore.thumbnailMidRange,
+                  hexToRgb(COLORS.density2D.midPreview),
+                  volumeStore.thumbnailView,
+                  MID_SIZE
+                );
+          volumeStore.setThumbnailImage(step, 'mid', img);
         }
 
         if (!volumeStore.getThumbnailImage(step, 'high')) {
@@ -496,6 +517,8 @@ const VolumeRenderer: React.FC = observer(() => {
     volumeStore.thumbnailView,
     volumeStore.thumbnailLowRange[0],
     volumeStore.thumbnailLowRange[1],
+    volumeStore.thumbnailMidRange[0],
+    volumeStore.thumbnailMidRange[1],
     volumeStore.thumbnailHighRange[0],
     volumeStore.thumbnailHighRange[1],
     volumeStore.thumbnailRefreshToken,
