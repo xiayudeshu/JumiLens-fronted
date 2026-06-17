@@ -1,23 +1,30 @@
 .dashboard-root {
-    // CSS custom properties scoped to dashboard
-    --color-bg-dashboard: #f0f2f5;
-    --color-bg-header: #003362;
-    --color-bg-panel: #ffffff;
-    --color-bg-panel-title: #fafafa;
-    --color-text-header: #ffffff;
-    --color-text-panel-title: #1a1a1a;
-    --color-text-body: #555;
-    --color-border: #e8e8e8;
-    --shadow-panel: 0 1px 4px rgba(0, 0, 0, 0.08);
-    --shadow-header: 0 2px 8px rgba(0, 0, 0, 0.15);
-    --radius: 8px;
+    // ── 与 index.css 主色调对齐 ──
+    --color-bg-dashboard: hsl(240 5% 96%);          // 暖灰白背景
+    --color-bg-header: hsl(218 70% 22%);            // 深海军蓝
+    --color-bg-panel: hsl(0 0% 100%);               // 纯白卡片
+    --color-bg-panel-title: hsl(210 20% 98%);       // slate-50 标题栏
+    --color-text-header: hsl(0 0% 100%);            // header 白字
+    --color-text-panel-title: hsl(222 47% 11%);     // slate-900
+    --color-text-body: hsl(215 16% 47%);            // slate-500
+    --color-border: hsl(214 32% 91%);               // slate-200
+    --shadow-panel: 0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+    --shadow-header: 0 1px 3px 0 rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+    --radius: var(--radius, 0.5rem);
+
+    // ── 差异图层色板 ──
+    --color-diff-swatch-growth: hsl(0 72% 50%);
+    --color-diff-swatch-decline: hsl(217 85% 52%);
 
     display: flex;
     flex-direction: column;
     height: 100vh;
     background-color: var(--color-bg-dashboard);
-    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-family: var(--font-sans, "Inter", -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
+    // ════ HEADER ════
     .header-root {
         height: 3.5vh;
         min-height: 40px;
@@ -25,54 +32,84 @@
         color: var(--color-text-header);
         display: flex;
         align-items: center;
-        padding: 0 24px;
+        justify-content: space-between;
+        padding: 0 20px;
         box-shadow: var(--shadow-header);
         z-index: 10;
+        user-select: none;
 
         .header-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 0.3px;
+            font-family: var(--font-sans);
         }
     }
 
+    // ════ MAIN CONTENT ════
     .main-content {
         flex: 1;
         display: flex;
+        flex-direction: row;
         overflow: hidden;
-        padding: 12px;
-        gap: 12px;
+        padding: 8px 10px 8px 10px;
+        gap: 8px;
 
-        .view1,
-        .view2 {
-            flex: 1;
+        // ── 左侧面板 60% ──
+        .left-panel {
+            flex: 6;
             display: flex;
             flex-direction: column;
             background: var(--color-bg-panel);
             border-radius: var(--radius);
             box-shadow: var(--shadow-panel);
+            border: 1px solid var(--color-border);
             overflow: hidden;
             min-height: 0;
+            min-width: 0;
+        }
 
-            .panel-title {
-                padding: 10px 16px;
-                background: var(--color-bg-panel-title);
-                border-bottom: 1px solid var(--color-border);
-                font-size: 15px;
-                font-weight: 600;
-                color: var(--color-text-panel-title);
-                letter-spacing: 0.5px;
-                flex-shrink: 0;
+        // ── 右侧面板 40% ──
+        .right-panel {
+            flex: 4;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 0;
+            min-width: 0;
+
+            .histogram-panel {
+                flex: 1.6;
+                min-height: 0;
             }
 
-            .panel-body {
-                flex: 1;
+            .evolution-panel {
+                flex: 0.9;
+                min-height: 0;
+            }
+
+            .panel-error {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                color: var(--color-text-body);
-                min-height: 0;
-                overflow: hidden;
+                height: 100%;
+                background: hsl(0 0% 100%);
+                border: 1px solid hsl(var(--destructive) / 0.3);
+                border-radius: var(--radius);
+
+                h3 {
+                    color: hsl(var(--destructive));
+                    margin: 0 0 12px 0;
+                    font-size: 15px;
+                    font-weight: 600;
+                }
+
+                p {
+                    color: hsl(var(--muted-foreground));
+                    margin: 0 0 16px 0;
+                    font-size: 13px;
+                }
             }
         }
     }

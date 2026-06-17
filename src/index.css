@@ -1,111 +1,244 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════
+   将 shadcn/ui 颜色令牌注册到 Tailwind v4 的 --color-* 命名空间
+   ═══════════════════════════════════════════════════════════════════ */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-sidebar-background: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --radius: var(--radius);
+  --font-sans: "Inter", -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", "Consolas", monospace;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   shadcn/ui 主题变量 — HSL 格式
+
+   设计方向: 精炼的 shadcn/ui 仪表盘风格
+   - 暖灰背景，纯白卡片
+   - 深海军蓝 header / 主色
+   - 克制的中蓝强调色
+   - slate 系边框与文字层级
+   ═══════════════════════════════════════════════════════════════════ */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* ── 字体 ── */
+  --font-sans: "Inter", -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", "Consolas", monospace;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* ── 背景层 ── */
+  --background: 240 5% 96%;              /* #f4f4f6 — 暖灰白 */
+  --foreground: 222 47% 11%;             /* #0f172a — slate-900 */
+  --card: 0 0% 100%;                     /* #ffffff */
+  --card-foreground: 222 47% 11%;        /* #0f172a */
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* ── 主色 / 品牌色 (header, 主要按钮) ── */
+  --primary: 218 70% 22%;                /* #0f2755 — 深海军蓝，比之前更有层次 */
+  --primary-foreground: 0 0% 100%;
+
+  /* ── 次要色 / 柔和色 ── */
+  --secondary: 210 20% 98%;              /* #f8fafc — slate-50 */
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 20% 96%;                  /* #f1f5f9 — slate-100 */
+  --muted-foreground: 215 16% 47%;       /* #64748b — slate-500 */
+
+  /* ── 强调色 (active tabs, links, highlights) ── */
+  --accent: 217 85% 52%;                 /* #3678ee — 中蓝，比之前的亮青更沉稳 */
+  --accent-foreground: 0 0% 100%;
+
+  /* ── 危险 / 错误色 ── */
+  --destructive: 0 72% 55%;              /* #dc3b3b — 柔红 */
+  --destructive-foreground: 0 0% 100%;
+
+  /* ── 边框与输入 ── */
+  --border: 214 32% 91%;                 /* #e2e8f0 — slate-200 */
+  --input: 214 32% 91%;
+  --ring: 217 85% 52%;                   /* 匹配 accent */
+
+  /* ── 圆角 ── */
+  --radius: 0.5rem;
+
+  /* ── 图表色 ── */
+  --chart-1: 218 70% 22%;
+  --chart-2: 217 85% 52%;
+  --chart-3: 160 60% 45%;
+  --chart-4: 35 85% 55%;
+  --chart-5: 340 70% 55%;
+
+  /* ── 侧边栏 ── */
+  --sidebar-background: 218 70% 22%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 217 85% 52%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 210 20% 96%;
+  --sidebar-accent-foreground: 222 47% 11%;
+  --sidebar-border: 214 32% 91%;
+  --sidebar-ring: 217 85% 52%;
+
+  /* ── 基础样式 ── */
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* ── 暗色模式（预置，当前未激活）── */
+.dark {
+  --background: 222 47% 6%;
+  --foreground: 210 20% 95%;
+  --card: 222 47% 8%;
+  --card-foreground: 210 20% 95%;
+  --popover: 222 47% 8%;
+  --popover-foreground: 210 20% 95%;
+  --primary: 210 20% 95%;
+  --primary-foreground: 222 47% 6%;
+  --secondary: 217 33% 16%;
+  --secondary-foreground: 210 20% 95%;
+  --muted: 217 33% 16%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 217 85% 52%;
+  --accent-foreground: 210 20% 95%;
+  --destructive: 0 63% 40%;
+  --destructive-foreground: 210 20% 95%;
+  --border: 217 33% 18%;
+  --input: 217 33% 18%;
+  --ring: 212 27% 84%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+  --sidebar-background: 222 47% 6%;
+  --sidebar-foreground: 210 20% 95%;
+  --sidebar-primary: 220 70% 50%;
+  --sidebar-primary-foreground: 210 20% 95%;
+  --sidebar-accent: 217 33% 16%;
+  --sidebar-accent-foreground: 210 20% 95%;
+  --sidebar-border: 217 33% 18%;
+  --sidebar-ring: 212 27% 84%;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
+/* ═══════════════════════════════════════════════════════════════════
+   全局基础样式
+   ═══════════════════════════════════════════════════════════════════ */
 body {
   margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* ═══════════════════════════════════════════════════════════════════
+   PrimeReact 主题覆盖 — 与现有设计系统对齐
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Panel 微调 */
+.p-panel .p-panel-header {
+  background: hsl(var(--secondary));
+  border-bottom: 1px solid hsl(var(--border));
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+}
+.p-panel .p-panel-content {
+  background: hsl(var(--card));
+  padding: 0.5rem;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+/* Chip 微调 */
+.p-chip {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  font-size: inherit;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* Divider */
+.p-divider.p-divider-horizontal {
+  border-color: hsl(var(--border));
+  margin: 0.25rem 0;
+}
+.p-divider .p-divider-content {
+  background: transparent;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* TabView 微调 */
+.p-tabview .p-tabview-nav {
+  background: transparent;
+  border-color: hsl(var(--border));
+}
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary));
+}
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  padding: 0.4rem 0.75rem;
+  font-size: 12px;
+}
+
+/* ToggleButton */
+.p-togglebutton {
+  font-size: 11px;
+  padding: 0.2rem 0.5rem;
+}
+
+/* Dropdown */
+.p-dropdown {
+  background: hsl(var(--background));
+  border-color: hsl(var(--border));
+}
+
+/* Slider */
+.p-slider .p-slider-range {
+  background: hsl(var(--primary));
+}
+.p-slider .p-slider-handle {
+  border-color: hsl(var(--primary));
+}
+
+/* Dialog */
+.p-dialog .p-dialog-header {
+  background: rgba(20, 20, 30, 0.95);
+  color: rgba(255, 255, 255, 0.85);
+}
+.p-dialog .p-dialog-content {
+  background: rgba(20, 20, 30, 0.95);
+  color: white;
+}
+
+/* ColorPicker */
+.p-colorpicker-panel {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
 }

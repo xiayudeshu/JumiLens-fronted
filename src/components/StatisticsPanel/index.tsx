@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.less';
+import { Panel } from 'primereact/panel';
 
 interface StatisticsData {
   min: number;
@@ -21,10 +22,9 @@ interface StatisticsPanelProps {
 const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ stats, timestep }) => {
   if (!stats) {
     return (
-      <div className="statistics-panel">
-        <div className="panel-title">统计信息</div>
-        <div className="loading">加载中...</div>
-      </div>
+      <Panel header="统计信息" className="statistics-panel">
+        <div className="text-center text-sm text-muted-foreground py-8">加载中...</div>
+      </Panel>
     );
   }
 
@@ -36,64 +36,42 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ stats, timestep }) =>
     return num.toFixed(4);
   };
 
+  const statItems = [
+    { label: '最小值', value: stats.min },
+    { label: '最大值', value: stats.max, highlight: true },
+    { label: '平均值', value: stats.mean },
+    { label: '标准差', value: stats.std },
+    { label: '中位数', value: stats.median },
+    { label: '1%分位数', value: stats.p1, low: true },
+    { label: '5%分位数', value: stats.p5, low: true },
+    { label: '95%分位数', value: stats.p95, high: true },
+    { label: '99%分位数', value: stats.p99, high: true },
+  ];
+
   return (
-    <div className="statistics-panel">
-      <div className="panel-title">统计信息 - 时间步 {timestep}</div>
-      
-      <div className="stats-grid">
-        <div className="stat-item">
-          <span className="stat-label">最小值</span>
-          <span className="stat-value">{formatNumber(stats.min)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">最大值</span>
-          <span className="stat-value highlight">{formatNumber(stats.max)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">平均值</span>
-          <span className="stat-value">{formatNumber(stats.mean)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">标准差</span>
-          <span className="stat-value">{formatNumber(stats.std)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">中位数</span>
-          <span className="stat-value">{formatNumber(stats.median)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">1%分位数</span>
-          <span className="stat-value low">{formatNumber(stats.p1)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">5%分位数</span>
-          <span className="stat-value low">{formatNumber(stats.p5)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">95%分位数</span>
-          <span className="stat-value high">{formatNumber(stats.p95)}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">99%分位数</span>
-          <span className="stat-value high">{formatNumber(stats.p99)}</span>
-        </div>
+    <Panel header={`统计信息 - 时间步 ${timestep}`} className="statistics-panel">
+      <div className="grid grid-cols-3 gap-2">
+        {statItems.map((item) => (
+          <div key={item.label} className="stat-item text-center p-1.5 rounded-md bg-muted/50">
+            <span className="stat-label text-xs text-muted-foreground block">{item.label}</span>
+            <span className={`stat-value text-sm font-medium ${item.highlight ? 'text-primary' : item.low ? 'text-blue-500' : item.high ? 'text-red-500' : 'text-foreground'}`}>
+              {formatNumber(item.value)}
+            </span>
+          </div>
+        ))}
       </div>
 
-      <div className="stats-summary">
-        <div className="summary-item">
-          <span className="summary-label">密度范围</span>
-          <span className="summary-value">
-            {formatNumber(stats.max - stats.min)}
-          </span>
+      <div className="stats-summary mt-3 pt-2 border-t flex justify-around">
+        <div className="text-center">
+          <span className="text-xs text-muted-foreground">密度范围</span>
+          <div className="text-sm font-medium">{formatNumber(stats.max - stats.min)}</div>
         </div>
-        <div className="summary-item">
-          <span className="summary-label">变异系数</span>
-          <span className="summary-value">
-            {formatNumber(stats.std / stats.mean)}
-          </span>
+        <div className="text-center">
+          <span className="text-xs text-muted-foreground">变异系数</span>
+          <div className="text-sm font-medium">{formatNumber(stats.std / stats.mean)}</div>
         </div>
       </div>
-    </div>
+    </Panel>
   );
 };
 

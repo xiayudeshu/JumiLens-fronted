@@ -1,6 +1,222 @@
+// ═══════════════════════════════════════════════════════════
+// View1 布局: 左侧面板内部
+// ┌─────────────────────────────────┐
+// │ 标题: 3D 立方体 (全宽)           │
+// ├─────────────────────────────────┤
+// │ 上半部分 (flex row 7:3)         │
+// │ ┌──────────┐ ┌───────┐         │
+// │ │ 3D视图    │ │传递函数│         │
+// │ │ (65%)    │ │(35%)  │         │
+// │ └──────────┘ └───────┘         │
+// ├─────────────────────────────────┤
+// │ 下半部分 时间轴                   │
+// └─────────────────────────────────┘
+// ═══════════════════════════════════════════════════════════
+
 .view1-root {
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
+    overflow: hidden;
+
+    // ──── 标题栏 (与右侧面板标题样式一致) ────
+    .evolution-chart-title {
+        flex-shrink: 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: hsl(var(--foreground));
+        text-align: left;
+        padding: 7px 12px;
+        background: hsl(var(--secondary));
+        border-bottom: 1px solid hsl(var(--border));
+        font-family: var(--font-sans);
+        letter-spacing: 0.2px;
+    }
+
+    .block-body {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    // ════ 上半部分: flex row (6.5:3.5) ════
+    .view1-top {
+        flex: 6;
+        display: flex;
+        flex-direction: row;
+        min-height: 0;
+        // border-bottom: 1px solid hsl(var(--border));
+
+        // ── 3D视图 65% ──
+        .view1-cube {
+            flex: 6.5;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            .cube-body {
+                position: relative;
+                background: hsl(220 14% 94%); // 3D canvas 浅灰背景
+            }
+        }
+
+        // ── 渲染设置面板 35% ──
+        .view1-tf {
+            flex: 3.5;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+            
+        }
+    }
+
+    // ════ 左下: 时间轴 ════
+    .view1-bottom {
+        flex: 4;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+
+        // ── Row: [▶3%] [图表94%] [倍速3%] (card style) ──
+        .chart-row {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            flex: 0 0 22%;
+            min-height: 56px;
+            margin: 6px 6px 4px 6px;
+            // border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            background: hsl(var(--card));
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgb(0 0 0 / 0.03);
+
+            .play-btn-inline {
+                flex: 0 0 2%;
+                min-width: 32px;
+                height: auto !important;
+                border-radius: 10px !important;
+                margin: 4px 3px ;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                background: hsl(var(--secondary));
+                border: 1px solid hsl(var(--border)) !important;
+                color: hsl(var(--muted-foreground));
+                font-size: clamp(11px, 0.9vw, 14px);
+                transition: background 0.15s, color 0.15s;
+                &:hover {
+                    background: hsl(var(--muted));
+                    color: hsl(var(--foreground));
+                }
+                &:disabled { opacity: 0.3; cursor: not-allowed; }
+            }
+
+            .tails-chart-wrapper {
+                flex: 1;
+                min-width: 0;
+                position: relative;
+                background: hsl(var(--card));
+                overflow: hidden;
+            }
+
+            .speed-select-inline {
+                flex: 0 0 2%;
+                min-width: 32px;
+                height: auto !important;
+                margin: 4px 3px;
+                 align-items: center;
+                justify-content: center;
+                border-radius: 10px !important;
+                border: 1px solid hsl(var(--border)) !important;
+                background: hsl(var(--secondary));
+                font-size: clamp(9px, 0.7vw, 11px);
+                .p-dropdown-label { padding: 2px 4px; text-align: center; }
+                .p-dropdown-trigger { display: none; } // hide chevron
+                &:hover {
+                    background: hsl(var(--muted));
+                }
+            }
+        }
+
+        // ── Tails chart internals ──
+        .tails-chart {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tails-chart-svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .tails-chart-step-overlay {
+            position: absolute;
+            top: 3px;
+            left: 8px;
+            font-size: clamp(9px, 0.8vw, 12px);
+            color: hsl(var(--muted-foreground));
+            font-weight: 500;
+            pointer-events: none;
+            z-index: 5;
+            font-variant-numeric: tabular-nums;
+            font-family: var(--font-mono);
+        }
+
+        .tails-chart-legend {
+            position: absolute;
+            top: 3px;
+            right: 8px;
+            display: flex;
+            gap: 8px;
+            pointer-events: none;
+            z-index: 5;
+
+            span {
+                font-size: clamp(8px, 0.65vw, 10px);
+                line-height: 1;
+                opacity: 0.7;
+                white-space: nowrap;
+            }
+        }
+
+        .tails-chart-tooltip {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            background: hsl(222 47% 11% / 0.92);
+            border: 1px solid hsl(var(--border) / 0.2);
+            border-radius: 6px;
+            padding: 5px 7px;
+            font-size: clamp(8px, 0.6vw, 10px);
+            line-height: 1.4;
+            white-space: nowrap;
+            color: hsl(0 0% 92%);
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+            font-family: var(--font-sans);
+
+            .tails-chart-tooltip-step {
+                color: hsl(0 0% 95%);
+                font-weight: 600;
+                margin-bottom: 2px;
+                border-bottom: 1px solid hsl(0 0% 100% / 0.1);
+                padding-bottom: 2px;
+                font-size: clamp(9px, 0.7vw, 11px);
+            }
+        }
+
+        .timeline-body {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            background: hsl(0 0% 100%);
+        }
+    }
 }
